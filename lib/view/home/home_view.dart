@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_order/view/viewfood/viewbreakfast.dart';
 import 'package:food_order/common/color_extension.dart';
-import 'package:food_order/common_widget/round_textfield.dart';
+import 'package:food_order/view/viewfood/viewdinnar.dart';
 import 'package:food_order/view/viewfood/viewlunch.dart';
 
 class HomeView extends StatefulWidget {
@@ -19,11 +19,11 @@ class _HomeViewState extends State<HomeView> {
       "image": "assets/img/menu_1.png",
     },
     {
-      "name": "lunch",
+      "name": "Lunch",
       "image": "assets/img/menu_2.png",
     },
     {
-      "name": "Dinar",
+      "name": "Dinner",
       "image": "assets/img/menu_3.png",
     },
   ];
@@ -40,10 +40,10 @@ class _HomeViewState extends State<HomeView> {
     var media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu'),
+        title: const Text('Menu'),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: _logout,
           ),
         ],
@@ -51,6 +51,15 @@ class _HomeViewState extends State<HomeView> {
       body: Stack(
         alignment: Alignment.centerLeft,
         children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "assets/img/splash_bg.png"), // Your background image
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(top: 80),
             width: media.width * 0.27,
@@ -84,17 +93,17 @@ class _HomeViewState extends State<HomeView> {
                                 MaterialPageRoute(
                                     builder: (context) => BreakfastListPage()),
                               );
-                            } else if (mObj["name"] == "lunch") {
+                            } else if (mObj["name"] == "Lunch") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => lunchListPage()),
                               );
-                            } else if (mObj["name"] == "Dinar") {
+                            } else if (mObj["name"] == "Dinner") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => BreakfastListPage()),
+                                    builder: (context) => dinarListPage()),
                               );
                             }
                           },

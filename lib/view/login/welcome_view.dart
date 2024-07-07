@@ -18,93 +18,102 @@ class _WelcomeViewState extends State<WelcomeView> {
     var media = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                SizedBox(
-                  height: media.width * 0.5,
-                ),
-                Text(
-                  "Food Order App",
-                  style: TextStyle(
-                    fontSize: media.width * 0.1, // Adjust font size as needed
-                    color: Color.fromARGB(255, 15, 15, 15),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: media.width * 0.4,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: RoundButton(
-                title: "Login",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginView(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: media.width * 0.1,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: RoundButton(
-                title: "Sigin up",
-                type: RoundButtonType.textPrimary,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignUpView(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdminLoginView(),
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/background.jpeg"), // Your background image
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.bottomCenter,
                 children: [
-                  Text(
-                    "Admin Login ",
-                    style: TextStyle(
-                        color: TColor.secondaryText,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
+                  SizedBox(
+                    height: media.width * 0.5,
                   ),
                   Text(
-                    "Admin Login",
+                    "Food Order App",
                     style: TextStyle(
-                        color: TColor.primary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
+                      fontSize: media.width * 0.1, // Adjust font size as needed
+                      color: Color.fromARGB(255, 15, 15, 15),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
+              SizedBox(
+                height: media.width * 0.4,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: RoundButton(
+                  title: "Login",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginView(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: media.width * 0.1,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: RoundButton(
+                  title: "Sign up",
+                  type: RoundButtonType.textPrimary,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignUpView(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminLoginView(),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "Admin Login ",
+                      style: TextStyle(
+                          color: TColor.secondaryText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      "Admin Login",
+                      style: TextStyle(
+                          color: TColor.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
