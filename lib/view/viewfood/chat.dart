@@ -28,6 +28,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
         'userId': widget.userId,
         'food': widget.foodData['food'],
         'price': widget.foodData['price'],
+        'track': 'add',
         'quantity': int.parse(_quantityController.text),
       }).then((_) {
         ScaffoldMessenger.of(context)

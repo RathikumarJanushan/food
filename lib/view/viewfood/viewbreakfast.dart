@@ -78,7 +78,7 @@ class BreakfastListPage extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            '\$${data['price']}',
+                            'RM${data['price']}',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.green[700],

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_order/common/color_extension.dart';
 import 'package:food_order/common_widget/tab_button.dart';
+import 'package:food_order/view/admin/ad_order.dart';
 import 'package:food_order/view/admin/add_menu_view.dart';
+import 'package:food_order/view/admin/admin_view_ship.dart';
+import 'package:food_order/view/admin/view_delivery.dart';
 import 'package:food_order/view/home/home_view.dart';
 
 class AdminMainTabView extends StatefulWidget {
@@ -62,13 +65,26 @@ class _AdminMainTabViewState extends State<AdminMainTabView> {
                   onTap: () {
                     if (selctTab != 1) {
                       selctTab = 1;
-                      selectPageView = Container();
+                      selectPageView = adminViewOrderScreen();
                     }
                     if (mounted) {
                       setState(() {});
                     }
                   },
                   isSelected: selctTab == 1),
+              TabButton(
+                  title: "TO Ship",
+                  icon: "assets/img/tab_order.png",
+                  onTap: () {
+                    if (selctTab != 2) {
+                      selctTab = 2;
+                      selectPageView = adminShipScreen();
+                    }
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  },
+                  isSelected: selctTab == 2),
               const SizedBox(
                 width: 40,
                 height: 40,
@@ -79,7 +95,7 @@ class _AdminMainTabViewState extends State<AdminMainTabView> {
                   onTap: () {
                     if (selctTab != 3) {
                       selctTab = 3;
-                      selectPageView = Container();
+                      selectPageView = DeliveryScreen();
                     }
                     if (mounted) {
                       setState(() {});

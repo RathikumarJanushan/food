@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_order/common/color_extension.dart';
 import 'package:food_order/common_widget/tab_button.dart';
 import 'package:food_order/view/home/home_view.dart';
+import 'package:food_order/view/track/ship.dart';
+import 'package:food_order/view/track/vieworder.dart';
 import 'package:food_order/view/viewfood/viewcart.dart';
 
 class MainTabView extends StatefulWidget {
@@ -69,17 +71,30 @@ class _MainTabViewState extends State<MainTabView> {
                     }
                   },
                   isSelected: selctTab == 1),
+              TabButton(
+                  title: "TO Ship",
+                  icon: "assets/img/tab_order.png",
+                  onTap: () {
+                    if (selctTab != 2) {
+                      selctTab = 2;
+                      selectPageView = ViewOrderScreen();
+                    }
+                    if (mounted) {
+                      setState(() {});
+                    }
+                  },
+                  isSelected: selctTab == 2),
               const SizedBox(
-                width: 100,
-                height: 100,
+                width: 30,
+                height: 30,
               ),
               TabButton(
-                  title: "My Order",
+                  title: "Shiped",
                   icon: "assets/img/tab_order.png",
                   onTap: () {
                     if (selctTab != 3) {
                       selctTab = 3;
-                      selectPageView = Container();
+                      selectPageView = ShipScreen();
                     }
                     if (mounted) {
                       setState(() {});

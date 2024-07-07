@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_order/common_widget/round_button.dart';
+import 'package:food_order/view/payment/checkout_view.dart';
+import 'package:food_order/view/track/order.dart';
 
 class CartScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,13 +14,23 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     User? user = _auth.currentUser;
 
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Your Cart'),
+        ),
+        body: Center(
+          child: Text('You need to log in to view your cart.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream:
-            cartCollection.where('userId', isEqualTo: user!.uid).snapshots(),
+        stream: cartCollection.where('userId', isEqualTo: user.uid).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -69,10 +81,21 @@ class CartScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
-              RoundButton(title: "Pay Now", onPressed: () {}),
-              const SizedBox(
-                height: 30,
+              RoundButton(
+                title: "Pay Now",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MergedOrderCheckoutScreen(
+                        cartItems: cartItems,
+                        totalPrice: totalPrice,
+                      ),
+                    ),
+                  );
+                },
               ),
+              const SizedBox(height: 30),
               SizedBox(height: 16),
             ],
           );
