@@ -76,15 +76,15 @@ class _AdminMainTabViewState extends State<AdminMainTabView> {
                   title: "TO Ship",
                   icon: "assets/img/tab_order.png",
                   onTap: () {
-                    if (selctTab != 2) {
-                      selctTab = 2;
+                    if (selctTab != 4) {
+                      selctTab = 4;
                       selectPageView = adminShipScreen();
                     }
                     if (mounted) {
                       setState(() {});
                     }
                   },
-                  isSelected: selctTab == 2),
+                  isSelected: selctTab == 4),
               const SizedBox(
                 width: 40,
                 height: 40,

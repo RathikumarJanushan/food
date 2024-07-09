@@ -32,15 +32,17 @@ class _SelectMinutesScreenState extends State<SelectMinutesScreen> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
+            Text('${widget.order['address']}'),
+            SizedBox(height: 10),
             Text('User ID: ${widget.order['userId']}'),
             SizedBox(height: 10),
             ...widget.order['items'].map<Widget>((item) {
               return Text(
-                '${item['food']}: \$${item['price']} x ${item['quantity']}',
+                '${item['food']}: \RM${item['price']} x ${item['quantity']}',
               );
             }).toList(),
             SizedBox(height: 10),
-            Text('Total Price: \$${widget.order['totalPrice']}'),
+            Text('Total Price: \RM${widget.order['totalPrice']}'),
             SizedBox(height: 20),
             DropdownButton<int>(
               value: selectedMinutes,
@@ -79,6 +81,7 @@ class _SelectMinutesScreenState extends State<SelectMinutesScreen> {
         'totalPrice': widget.order['totalPrice'],
         'timestamp': widget.order['timestamp'],
         'readyInMinutes': selectedMinutes,
+        'address': widget.order['address'],
       });
 
       // Delete the order from the 'orders' collection

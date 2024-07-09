@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_order/common_widget/round_button.dart';
-import 'package:food_order/view/payment/checkout_view.dart';
+
 import 'package:food_order/view/track/order.dart';
 
 class CartScreen extends StatelessWidget {
@@ -69,7 +69,7 @@ class CartScreen extends StatelessWidget {
                     return ListTile(
                       title: Text(food),
                       subtitle: Text(
-                          'Price: \$${(price * quantity).toStringAsFixed(2)}'),
+                          'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
                       trailing: Text('Quantity: $quantity'),
                     );
                   },
@@ -77,7 +77,7 @@ class CartScreen extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Text(
-                'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),

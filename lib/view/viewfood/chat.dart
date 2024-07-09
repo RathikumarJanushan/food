@@ -59,7 +59,7 @@ class _AddToCartPageState extends State<AddToCartPage> {
               ),
               SizedBox(height: 16),
               Text(
-                '\$${widget.foodData['price']}',
+                '\RM${widget.foodData['price']}',
                 style: TextStyle(fontSize: 20, color: Colors.green[700]),
               ),
               SizedBox(height: 16),

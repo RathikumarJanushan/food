@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_order/common/color_extension.dart';
 import 'package:food_order/common_widget/tab_button.dart';
+import 'package:food_order/view/coin/viewcoin.dart';
 import 'package:food_order/view/home/home_view.dart';
 import 'package:food_order/view/track/ship.dart';
 import 'package:food_order/view/track/vieworder.dart';
@@ -75,15 +76,15 @@ class _MainTabViewState extends State<MainTabView> {
                   title: "TO Ship",
                   icon: "assets/img/tab_order.png",
                   onTap: () {
-                    if (selctTab != 2) {
-                      selctTab = 2;
+                    if (selctTab != 5) {
+                      selctTab = 5;
                       selectPageView = ViewOrderScreen();
                     }
                     if (mounted) {
                       setState(() {});
                     }
                   },
-                  isSelected: selctTab == 2),
+                  isSelected: selctTab == 5),
               const SizedBox(
                 width: 30,
                 height: 30,
@@ -107,7 +108,7 @@ class _MainTabViewState extends State<MainTabView> {
                   onTap: () {
                     if (selctTab != 4) {
                       selctTab = 4;
-                      selectPageView = Container();
+                      selectPageView = CoinsViewPage();
                     }
                     if (mounted) {
                       setState(() {});

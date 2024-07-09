@@ -55,6 +55,7 @@ class ShipScreen extends StatelessWidget {
               double totalPrice = order['totalPrice'];
               Timestamp timestamp = order['timestamp'];
               int readyInMinutes = order['readyInMinutes'];
+              String address = order['address'];
 
               return Card(
                 margin: EdgeInsets.all(10),
@@ -79,6 +80,13 @@ class ShipScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 10),
+                      Text(
+                        '$address',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       ...items.map((item) {
                         String food = item['food'];
                         double price = double.tryParse(item['price']) ?? 0.0;
@@ -87,14 +95,14 @@ class ShipScreen extends StatelessWidget {
                         return ListTile(
                           title: Text(food),
                           subtitle: Text(
-                              'Price: \$${price.toStringAsFixed(2)} x $quantity'),
+                              'Price: \RM${price.toStringAsFixed(2)} x $quantity'),
                           trailing: Text(
-                              'Total: \$${(price * quantity).toStringAsFixed(2)}'),
+                              'Total: \RM${(price * quantity).toStringAsFixed(2)}'),
                         );
                       }).toList(),
                       SizedBox(height: 10),
                       Text(
-                        'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -134,6 +142,7 @@ class ShipScreen extends StatelessWidget {
         'totalPrice': order['totalPrice'],
         'timestamp': order['timestamp'],
         'readyInMinutes': order['readyInMinutes'],
+        'address': order['address'],
       });
 
       // Delete the order from the 'ship' collection

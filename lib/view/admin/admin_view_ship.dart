@@ -37,6 +37,7 @@ class adminShipScreen extends StatelessWidget {
               double totalPrice = order['totalPrice'];
               Timestamp timestamp = order['timestamp'];
               int readyInMinutes = order['readyInMinutes'];
+              String address = order['address'];
 
               return Card(
                 margin: EdgeInsets.all(10),
@@ -57,7 +58,13 @@ class adminShipScreen extends StatelessWidget {
                         'Order Date: ${timestamp.toDate().toLocal().toString()}',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '$address',
+                        style: TextStyle(
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(height: 10),
@@ -69,14 +76,14 @@ class adminShipScreen extends StatelessWidget {
                         return ListTile(
                           title: Text(food),
                           subtitle: Text(
-                              'Price: \$${price.toStringAsFixed(2)} x $quantity'),
+                              'Price: \RM${price.toStringAsFixed(2)} x $quantity'),
                           trailing: Text(
-                              'Total: \$${(price * quantity).toStringAsFixed(2)}'),
+                              'Total: \RM${(price * quantity).toStringAsFixed(2)}'),
                         );
                       }).toList(),
                       SizedBox(height: 10),
                       Text(
-                        'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

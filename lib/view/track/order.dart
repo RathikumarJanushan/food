@@ -30,7 +30,7 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
   ];
 
   int selectMethod = -1;
-  String address = " ";
+  String address = "";
 
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cardDateController = TextEditingController();
@@ -97,31 +97,6 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 46),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Image.asset("assets/img/btn_back.png",
-                          width: 20, height: 20),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        "Checkout",
-                        style: TextStyle(
-                            color: TColor.primaryText,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
@@ -129,7 +104,7 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Delivery Address",
+                      "Phone NO & Address",
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(color: TColor.secondaryText, fontSize: 12),
@@ -196,14 +171,14 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
                         return ListTile(
                           title: Text(food),
                           subtitle: Text(
-                              'Price: \$${(price * quantity).toStringAsFixed(2)}'),
+                              'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
                           trailing: Text('Quantity: $quantity'),
                         );
                       },
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Total Price: \$${widget.totalPrice.toStringAsFixed(2)}',
+                      'Total Price: \RM${widget.totalPrice.toStringAsFixed(2)}',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -349,6 +324,7 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
                     'items': items,
                     'totalPrice': widget.totalPrice,
                     'timestamp': FieldValue.serverTimestamp(),
+                    'address': address, // Add user's address
                   });
 
                   // Delete items from cart collection
@@ -356,8 +332,27 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
                     await cartCollection.doc(doc.id).delete();
                   }
 
+                  // Update user's coins
+                  DocumentReference coinRef = FirebaseFirestore.instance
+                      .collection('coins')
+                      .doc(user.uid);
+
+                  // Get current coin balance
+                  DocumentSnapshot coinSnapshot = await coinRef.get();
+                  double currentCoins = coinSnapshot.exists
+                      ? (coinSnapshot['coins'] ?? 0.0)
+                      : 0.0;
+
+                  // Add total price to current coin balance
+                  double updatedCoins = currentCoins + widget.totalPrice;
+
+                  // Save updated coin balance to Firestore
+                  await coinRef.set({'coins': updatedCoins});
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Order added successfully!')),
+                    SnackBar(
+                        content:
+                            Text('Order added successfully! Coins updated.')),
                   );
 
                   Navigator.pop(context); // Navigate back to cart or home
