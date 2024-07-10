@@ -71,8 +71,11 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
+        height: media.height, // Ensure the container takes full screen height
+        width: media.width, // Ensure the container takes full screen width
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(

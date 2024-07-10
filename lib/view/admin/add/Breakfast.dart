@@ -75,6 +75,13 @@ class _BreakfastPageState extends State<BreakfastPage> {
         title: Text('Add Breakfast Food'),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/splash_bg.png"), // Replace with your own image path
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[

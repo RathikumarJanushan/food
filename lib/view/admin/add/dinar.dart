@@ -75,6 +75,13 @@ class _dinarPageState extends State<dinarPage> {
         title: Text('Add dinar Food'),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/splash_bg.png"), // Replace with your image path
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[

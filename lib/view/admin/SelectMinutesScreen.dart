@@ -22,51 +22,60 @@ class _SelectMinutesScreenState extends State<SelectMinutesScreen> {
       appBar: AppBar(
         title: Text('Select Minutes and Ship'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Order Details',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text('${widget.order['address']}'),
-            SizedBox(height: 10),
-            Text('User ID: ${widget.order['userId']}'),
-            SizedBox(height: 10),
-            ...widget.order['items'].map<Widget>((item) {
-              return Text(
-                '${item['food']}: \RM${item['price']} x ${item['quantity']}',
-              );
-            }).toList(),
-            SizedBox(height: 10),
-            Text('Total Price: \RM${widget.order['totalPrice']}'),
-            SizedBox(height: 20),
-            DropdownButton<int>(
-              value: selectedMinutes,
-              items: List.generate(
-                59,
-                (index) => DropdownMenuItem<int>(
-                  value: index + 1,
-                  child: Text('${index + 1} minutes'),
-                ),
-              ).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedMinutes = value!;
-                });
-              },
-            ),
-            SizedBox(height: 20),
-            RoundButton(
-              onPressed: () async {
-                await shipOrder();
-              },
-              title: "Ready to Ship",
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/splash_bg.png"), // Replace with your image path
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Order Details',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text('${widget.order['address']}'),
+              SizedBox(height: 10),
+              Text('User ID: ${widget.order['userId']}'),
+              SizedBox(height: 10),
+              ...widget.order['items'].map<Widget>((item) {
+                return Text(
+                  '${item['food']}: \$${item['price']} x ${item['quantity']}',
+                );
+              }).toList(),
+              SizedBox(height: 10),
+              Text('Total Price: \$${widget.order['totalPrice']}'),
+              SizedBox(height: 20),
+              DropdownButton<int>(
+                value: selectedMinutes,
+                items: List.generate(
+                  59,
+                  (index) => DropdownMenuItem<int>(
+                    value: index + 1,
+                    child: Text('${index + 1} minutes'),
+                  ),
+                ).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedMinutes = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              RoundButton(
+                onPressed: () async {
+                  await shipOrder();
+                },
+                title: "Ready to Ship",
+              ),
+            ],
+          ),
         ),
       ),
     );

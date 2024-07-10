@@ -11,108 +11,123 @@ class userDeliveryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     User? user = _auth.currentUser;
 
-    if (user == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Delivered Orders'),
-        ),
-        body: Center(
-          child: Text('You are not logged in.'),
-        ),
-      );
-    }
+    var media = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Delivered Orders'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream:
-            deliveryCollection.where('userId', isEqualTo: user.uid).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No delivered orders found.'));
-          }
-
-          List<DocumentSnapshot> deliveryItems = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: deliveryItems.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot order = deliveryItems[index];
-              String userId = order['userId'];
-              List<dynamic> items = order['items'];
-              double totalPrice = order['totalPrice'];
-              Timestamp timestamp = order['timestamp'];
-              int readyInMinutes = order['readyInMinutes'];
-
-              return Card(
-                margin: EdgeInsets.all(10),
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'User ID: $userId',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Order Date: ${timestamp.toDate().toLocal().toString()}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      ...items.map((item) {
-                        String food = item['food'];
-                        double price = double.tryParse(item['price']) ?? 0.0;
-                        int quantity = item['quantity'];
-
-                        return ListTile(
-                          title: Text(food),
-                          subtitle: Text(
-                              'Price: \RM${price.toStringAsFixed(2)} x $quantity'),
-                          trailing: Text(
-                              'Total: \RM${(price * quantity).toStringAsFixed(2)}'),
-                        );
-                      }).toList(),
-                      SizedBox(height: 10),
-                      Text(
-                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Ready in: $readyInMinutes minutes',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+      body: Container(
+        height: media.height, // Ensure the container takes full screen height
+        width: media.width, // Ensure the container takes full screen width
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image:
+                AssetImage("assets/img/splash_bg.png"), // Your background image
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: user == null
+            ? Center(
+                child: Text(
+                  'You are not logged in.',
+                  style: TextStyle(color: Colors.white),
                 ),
-              );
-            },
-          );
-        },
+              )
+            : StreamBuilder<QuerySnapshot>(
+                stream: deliveryCollection
+                    .where('userId', isEqualTo: user.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                        child: Text('Error: ${snapshot.error}',
+                            style: TextStyle(color: Colors.white)));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Center(
+                        child: Text('No delivered orders found.',
+                            style: TextStyle(color: Colors.white)));
+                  }
+
+                  List<DocumentSnapshot> deliveryItems = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: deliveryItems.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot order = deliveryItems[index];
+                      String userId = order['userId'];
+                      List<dynamic> items = order['items'];
+                      double totalPrice = order['totalPrice'];
+                      Timestamp timestamp = order['timestamp'];
+                      int readyInMinutes = order['readyInMinutes'];
+
+                      return Card(
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'User ID: $userId',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'Order Date: ${timestamp.toDate().toLocal().toString()}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              ...items.map((item) {
+                                String food = item['food'];
+                                double price =
+                                    double.tryParse(item['price']) ?? 0.0;
+                                int quantity = item['quantity'];
+
+                                return ListTile(
+                                  title: Text(food),
+                                  subtitle: Text(
+                                      'Price: \$${price.toStringAsFixed(2)} x $quantity'),
+                                  trailing: Text(
+                                      'Total: \$${(price * quantity).toStringAsFixed(2)}'),
+                                );
+                              }).toList(),
+                              SizedBox(height: 10),
+                              Text(
+                                'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'Ready in: $readyInMinutes minutes',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_order/common/color_extension.dart';
 import 'package:food_order/common_widget/round_button.dart';
 import 'package:food_order/common_widget/round_textfield.dart';
+import 'package:food_order/view/login/reset.dart';
 import 'package:food_order/view/login/sing_up_view.dart';
 import 'package:food_order/view/on_boarding/on_boarding_view.dart';
 
@@ -45,8 +46,11 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
+        height: media.height, // Ensure the container takes full screen height
+        width: media.width,
         decoration: BoxDecoration(
           image: DecorationImage(
             image:
@@ -101,10 +105,17 @@ class _LoginViewState extends State<LoginView> {
                   onPressed: _login,
                 ),
                 const SizedBox(
-                  height: 4,
+                  height: 25,
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PasswordResetScreen(),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Forgot your password?",
                     style: TextStyle(
@@ -114,7 +125,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 const SizedBox(
-                  height: 80,
+                  height: 5,
                 ),
                 TextButton(
                   onPressed: () {

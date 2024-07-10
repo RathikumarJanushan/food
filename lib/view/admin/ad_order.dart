@@ -13,104 +13,113 @@ class adminViewOrderScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('All Orders'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: orderCollection.snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/splash_bg.png"), // Replace with your image path
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: orderCollection.snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No orders found.'));
-          }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No orders found.'));
+            }
 
-          List<DocumentSnapshot> orderItems = snapshot.data!.docs;
+            List<DocumentSnapshot> orderItems = snapshot.data!.docs;
 
-          return ListView.builder(
-            itemCount: orderItems.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot order = orderItems[index];
-              String userId = order['userId'];
-              List<dynamic> items = order['items'];
-              double totalPrice = order['totalPrice'];
-              Timestamp timestamp = order['timestamp'];
-              String address = order['address'];
+            return ListView.builder(
+              itemCount: orderItems.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot order = orderItems[index];
+                String userId = order['userId'];
+                List<dynamic> items = order['items'];
+                double totalPrice = order['totalPrice'];
+                Timestamp timestamp = order['timestamp'];
+                String address = order['address'];
 
-              return Card(
-                margin: EdgeInsets.all(10),
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'User ID: $userId',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'User ID: $userId',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Address: $address',
-                        style: TextStyle(
-                          fontSize: 16,
+                        SizedBox(height: 10),
+                        Text(
+                          'Address: $address',
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Order Date: ${timestamp.toDate().toLocal().toString()}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(height: 10),
+                        Text(
+                          'Order Date: ${timestamp.toDate().toLocal().toString()}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      ...items.map((item) {
-                        String food = item['food'];
-                        double price = double.tryParse(item['price']) ?? 0.0;
-                        int quantity = item['quantity'];
+                        SizedBox(height: 10),
+                        ...items.map((item) {
+                          String food = item['food'];
+                          double price = double.tryParse(item['price']) ?? 0.0;
+                          int quantity = item['quantity'];
 
-                        return ListTile(
-                          title: Text(food),
-                          subtitle: Text(
-                              'Price: \RM${price.toStringAsFixed(2)} x $quantity'),
-                          trailing: Text(
-                              'Total: \RM${(price * quantity).toStringAsFixed(2)}'),
-                        );
-                      }).toList(),
-                      SizedBox(height: 10),
-                      Text(
-                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  SelectMinutesScreen(order: order),
-                            ),
+                          return ListTile(
+                            title: Text(food),
+                            subtitle: Text(
+                                'Price: \$${price.toStringAsFixed(2)} x $quantity'),
+                            trailing: Text(
+                                'Total: \$${(price * quantity).toStringAsFixed(2)}'),
                           );
-                        },
-                        child: Text('Select Minutes and Ship'),
-                      ),
-                    ],
+                        }).toList(),
+                        SizedBox(height: 10),
+                        Text(
+                          'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SelectMinutesScreen(order: order),
+                              ),
+                            );
+                          },
+                          child: Text('Select Minutes and Ship'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

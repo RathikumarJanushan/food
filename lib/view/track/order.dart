@@ -24,7 +24,7 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List paymentArr = [
-    {"name": "Cash on delivery", "icon": "assets/img/cash.png"},
+    {"name": "Pay with coins", "icon": "assets/img/cash.png"},
     {"name": "**** **** **** ****", "icon": "assets/img/visa_icon.png"},
     {"name": "****@gmail.com", "icon": "assets/img/paypal.png"},
   ];

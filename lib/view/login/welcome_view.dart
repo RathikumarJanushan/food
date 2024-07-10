@@ -19,6 +19,8 @@ class _WelcomeViewState extends State<WelcomeView> {
 
     return Scaffold(
       body: Container(
+        height: media.height, // Ensure the container takes full screen height
+        width: media.width, // Ensure the container takes full screen width
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -29,25 +31,23 @@ class _WelcomeViewState extends State<WelcomeView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  SizedBox(
-                    height: media.width * 0.5,
-                  ),
-                  Text(
-                    "Food Order App",
-                    style: TextStyle(
-                      fontSize: media.width * 0.1, // Adjust font size as needed
-                      color: Color.fromARGB(255, 15, 15, 15),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              SizedBox(height: media.width * 0.5), // Adjust spacing
+              Text(
+                "Food Order App",
+                style: TextStyle(
+                  fontSize: media.width * 0.1, // Adjust font size as needed
+                  color: Color.fromARGB(255, 15, 15, 15),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               SizedBox(
-                height: media.width * 0.4,
+                height: media.width * 0.5,
+                child: Image.asset(
+                  "assets/img/logo.jpeg", // Replace with your logo image path
+                  fit: BoxFit.contain, // Adjust the fit as needed
+                ),
               ),
+              SizedBox(height: media.width * 0.05), // Adjust spacing
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: RoundButton(
@@ -62,9 +62,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                   },
                 ),
               ),
-              SizedBox(
-                height: media.width * 0.1,
-              ),
+              SizedBox(height: media.width * 0.1), // Adjust spacing
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: RoundButton(
@@ -80,9 +78,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                   },
                 ),
               ),
-              const SizedBox(
-                height: 40,
-              ),
+              SizedBox(height: 40),
               TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -98,16 +94,18 @@ class _WelcomeViewState extends State<WelcomeView> {
                     Text(
                       "Admin Login ",
                       style: TextStyle(
-                          color: TColor.secondaryText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
+                        color: TColor.secondaryText,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Text(
                       "Admin Login",
                       style: TextStyle(
-                          color: TColor.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
+                        color: TColor.primary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),

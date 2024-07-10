@@ -75,6 +75,13 @@ class _lunchPageState extends State<lunchPage> {
         title: Text('Add lunch Food'),
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                "assets/img/splash_bg.png"), // Replace with your image path
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[

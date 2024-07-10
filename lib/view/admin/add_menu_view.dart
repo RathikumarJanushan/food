@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_order/view/admin/add/Breakfast.dart';
 import 'package:food_order/view/admin/add/dinar.dart';
 import 'package:food_order/view/admin/add/lunch.dart';
 
-import '../../common/color_extension.dart';
-
-// Import the Dinar page
+import 'package:food_order/common/color_extension.dart';
 
 class AddMenuView extends StatefulWidget {
   const AddMenuView({super.key});
@@ -21,25 +20,49 @@ class _AddMenuViewState extends State<AddMenuView> {
       "image": "assets/img/menu_1.png",
     },
     {
-      "name": "lunch",
+      "name": "Lunch",
       "image": "assets/img/menu_2.png",
     },
     {
-      "name": "Dinar",
+      "name": "Dinner",
       "image": "assets/img/menu_3.png",
     },
   ];
   TextEditingController txtSearch = TextEditingController();
 
+  Future<void> _logout() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacementNamed(
+        context, '/login'); // Navigate to the login screen after logout
+  }
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Menu'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
+      ),
       body: Stack(
         alignment: Alignment.centerLeft,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 180),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "assets/img/splash_bg.png"), // Your background image
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 80),
             width: media.width * 0.27,
             height: media.height * 0.6,
             decoration: BoxDecoration(
@@ -54,27 +77,6 @@ class _AddMenuViewState extends State<AddMenuView> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 46,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Add Menu",
-                          style: TextStyle(
-                              color: TColor.primaryText,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
                   ListView.builder(
                       padding: const EdgeInsets.symmetric(
                           vertical: 30, horizontal: 20),
@@ -92,13 +94,13 @@ class _AddMenuViewState extends State<AddMenuView> {
                                 MaterialPageRoute(
                                     builder: (context) => BreakfastPage()),
                               );
-                            } else if (mObj["name"] == "lunch") {
+                            } else if (mObj["name"] == "Lunch") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => lunchPage()),
                               );
-                            } else if (mObj["name"] == "Dinar") {
+                            } else if (mObj["name"] == "Dinner") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -152,6 +154,9 @@ class _AddMenuViewState extends State<AddMenuView> {
                                               color: TColor.primaryText,
                                               fontSize: 22,
                                               fontWeight: FontWeight.w700),
+                                        ),
+                                        const SizedBox(
+                                          height: 4,
                                         ),
                                       ],
                                     ),

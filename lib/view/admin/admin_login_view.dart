@@ -3,13 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_order/common/color_extension.dart';
 import 'package:food_order/common_widget/round_button.dart';
 import 'package:food_order/common_widget/round_textfield.dart';
-
-import 'package:food_order/view/admin/add_menu_view.dart';
 import 'package:food_order/view/admin/admin_main_tabview.dart';
-// Ensure you have this view or create it
 
 class AdminLoginView extends StatefulWidget {
-  const AdminLoginView({super.key});
+  const AdminLoginView({Key? key}) : super(key: key);
 
   @override
   State<AdminLoginView> createState() => _AdminLoginViewState();
@@ -19,7 +16,7 @@ class _AdminLoginViewState extends State<AdminLoginView> {
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
 
-  Future<void> _Adminlogin() async {
+  Future<void> _adminLogin() async {
     try {
       CollectionReference users =
           FirebaseFirestore.instance.collection('admin');
@@ -29,12 +26,11 @@ class _AdminLoginViewState extends State<AdminLoginView> {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // User found, navigate to Welcome page
+        // User found, navigate to AdminMainTabView
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                AdminMainTabView(), // Ensure you have this view or create it
+            builder: (context) => AdminMainTabView(),
           ),
         );
       } else {
@@ -52,54 +48,58 @@ class _AdminLoginViewState extends State<AdminLoginView> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 64,
-              ),
-              Text(
-                "Admin Login",
-                style: TextStyle(
-                    color: TColor.primaryText,
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800),
-              ),
-              Text(
-                "Add Admin details to login",
-                style: TextStyle(
-                    color: TColor.secondaryText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              RoundTextfield(
-                hintText: "Admin Email",
-                controller: txtEmail,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              RoundTextfield(
-                hintText: "Admin Password",
-                controller: txtPassword,
-                obscureText: true,
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              RoundButton(
-                title: "Admin Login",
-                onPressed: _Adminlogin,
-              ),
-            ],
+      body: Container(
+        height: media.height,
+        width: media.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/img/splash_bg.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 64),
+                Text(
+                  "Admin Login",
+                  style: TextStyle(
+                      color: TColor.primaryText,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800),
+                ),
+                Text(
+                  "Add Admin details to login",
+                  style: TextStyle(
+                      color: TColor.secondaryText,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 25),
+                RoundTextfield(
+                  hintText: "Admin Email",
+                  controller: txtEmail,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 25),
+                RoundTextfield(
+                  hintText: "Admin Password",
+                  controller: txtPassword,
+                  obscureText: true,
+                ),
+                const SizedBox(height: 25),
+                RoundButton(
+                  title: "Admin Login",
+                  onPressed: _adminLogin,
+                ),
+              ],
+            ),
           ),
         ),
       ),
