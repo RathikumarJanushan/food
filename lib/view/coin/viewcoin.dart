@@ -84,7 +84,7 @@ class _CoinsViewPageState extends State<CoinsViewPage> {
                             ),
                           ),
                           subtitle: Text(
-                            'Value: $coinValue coins = \$$dollarValue',
+                            'Value: $coinValue coins = \RM$dollarValue',
                             style: TextStyle(
                               fontSize: 16,
                             ),
