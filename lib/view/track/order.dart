@@ -24,7 +24,7 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   List paymentArr = [
-    {"name": "Pay with coins", "icon": "assets/img/cash.png"},
+    {"name": "Pay with QR", "icon": "assets/img/cash.png"},
     {"name": "**** **** **** ****", "icon": "assets/img/visa_icon.png"},
     {"name": "****@gmail.com", "icon": "assets/img/paypal.png"},
   ];
@@ -251,6 +251,19 @@ class _MergedOrderCheckoutScreenState extends State<MergedOrderCheckoutScreen> {
                             ),
                           );
                         }),
+                    Visibility(
+                      visible: selectMethod == 0,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          Image.asset(
+                            'assets/img/paynow.png',
+                            width: 150,
+                            height: 150,
+                          ),
+                        ],
+                      ),
+                    ),
                     Visibility(
                       visible: selectMethod == 1,
                       child: Column(
