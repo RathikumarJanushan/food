@@ -15,6 +15,7 @@ class ViewOrderScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text('Your Orders'),
+          automaticallyImplyLeading: false, // Removes the back button
         ),
         body: Center(
           child: Text('You need to log in to view your orders.'),
@@ -25,6 +26,7 @@ class ViewOrderScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Orders'),
+        automaticallyImplyLeading: false, // Removes the back button
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream:

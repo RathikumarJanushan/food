@@ -18,6 +18,7 @@ class ShipScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text('Ready to Ship Orders'),
+          automaticallyImplyLeading: false, // Removes the back button
         ),
         body: Center(
           child: Text('You are not logged in.'),
@@ -28,6 +29,7 @@ class ShipScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ready to Ship Orders'),
+        automaticallyImplyLeading: false, // Removes the back button
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: shipCollection.where('userId', isEqualTo: user.uid).snapshots(),

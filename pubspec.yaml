@@ -43,6 +43,8 @@ dependencies:
   another_flushbar: ^1.12.30
 
 dev_dependencies:
+  flutter_plugin_tools: ^0.13.4+3
+
   flutter_test:
     sdk: flutter
 

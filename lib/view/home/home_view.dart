@@ -41,6 +41,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Menu'),
+        automaticallyImplyLeading: false, // Removes the back button
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -76,6 +77,15 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 children: [
+                  // Add logo here below the AppBar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Image.asset(
+                      'assets/img/logo.jpeg', // Your logo image path
+                      width: 100, // Adjust width as needed
+                      height: 100, // Adjust height as needed
+                    ),
+                  ),
                   ListView.builder(
                       padding: const EdgeInsets.symmetric(
                           vertical: 30, horizontal: 20),

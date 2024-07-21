@@ -12,6 +12,7 @@ class adminViewOrderScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('All Orders'),
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Container(
         decoration: BoxDecoration(

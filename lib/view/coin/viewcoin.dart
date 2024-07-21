@@ -26,6 +26,7 @@ class _CoinsViewPageState extends State<CoinsViewPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Coins'),
+        automaticallyImplyLeading: false, // Removes the back button
       ),
       body: Container(
         height: media.height, // Ensure the container takes full screen height

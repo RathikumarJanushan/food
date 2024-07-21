@@ -5,7 +5,7 @@ import 'package:food_order/common_widget/round_button.dart';
 import 'package:food_order/common_widget/round_textfield.dart';
 import 'package:food_order/view/login/reset.dart';
 import 'package:food_order/view/login/sing_up_view.dart';
-import 'package:food_order/view/on_boarding/on_boarding_view.dart';
+import 'package:food_order/view/main_tabview/main_tabview.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -32,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const OnBoardingView(),
+            builder: (context) => const MainTabView(),
           ),
         );
       }

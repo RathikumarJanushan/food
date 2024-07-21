@@ -10,6 +10,7 @@ class adminShipScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ready to Ship Orders'),
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Container(
         decoration: BoxDecoration(

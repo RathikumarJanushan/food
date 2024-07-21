@@ -33,7 +33,7 @@ class _WelcomeViewState extends State<WelcomeView> {
             children: [
               SizedBox(height: media.width * 0.5), // Adjust spacing
               Text(
-                "Food Order App",
+                "Larutzz",
                 style: TextStyle(
                   fontSize: media.width * 0.1, // Adjust font size as needed
                   color: Color.fromARGB(255, 15, 15, 15),

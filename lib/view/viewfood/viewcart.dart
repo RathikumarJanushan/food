@@ -22,6 +22,7 @@ class CartScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text('Your Cart'),
+          automaticallyImplyLeading: false, // Removes the back button
         ),
         body: Container(
           height: media.height,
@@ -42,6 +43,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
+        automaticallyImplyLeading: false, // Removes the back button
       ),
       body: Container(
         height: media.height,
@@ -101,15 +103,28 @@ class CartScreen extends StatelessWidget {
                             return ListTile(
                               title: Text(food),
                               subtitle: Text(
-                                  'Price: \$${(price * quantity).toStringAsFixed(2)}'),
-                              trailing: Text('Quantity: $quantity'),
+                                  'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Quantity: $quantity'),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () async {
+                                      await cartCollection
+                                          .doc(item.id)
+                                          .delete();
+                                    },
+                                  ),
+                                ],
+                              ),
                             );
                           },
                         ),
                       ),
                       SizedBox(height: 16),
                       Text(
-                        'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -154,15 +169,26 @@ class CartScreen extends StatelessWidget {
                           return ListTile(
                             title: Text(food),
                             subtitle: Text(
-                                'Price: \$${(price * quantity).toStringAsFixed(2)}'),
-                            trailing: Text('Quantity: $quantity'),
+                                'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Quantity: $quantity'),
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () async {
+                                    await cartCollection.doc(item.id).delete();
+                                  },
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                      'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -183,7 +209,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'Coins: $coinValue   value = \$${dollarValue.toStringAsFixed(2)}',
+                      'Coins: $coinValue   value = \RM${dollarValue.toStringAsFixed(2)}',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

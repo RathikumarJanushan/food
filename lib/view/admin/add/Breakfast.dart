@@ -5,7 +5,7 @@ import 'package:food_order/common_widget/round_button.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart'; // Import this package
+import 'package:flutter/services.dart';
 
 class BreakfastPage extends StatefulWidget {
   @override
@@ -53,7 +53,6 @@ class _BreakfastPageState extends State<BreakfastPage> {
       'imageUrl': imageUrl,
     }).then((value) {
       print("Data added successfully");
-      // Show toast message indicating data added successfully
       Fluttertoast.showToast(
         msg: "Data added successfully",
         toastLength: Toast.LENGTH_SHORT,
@@ -61,10 +60,51 @@ class _BreakfastPageState extends State<BreakfastPage> {
         backgroundColor: Colors.green,
         textColor: Colors.white,
       );
-      // Navigate back to the previous page
       Navigator.pop(context);
     }).catchError((error) {
       print("Failed to add data: $error");
+    });
+  }
+
+  void updateDataInFirestore(String docId, String? imageUrl) {
+    String food = foodController.text;
+    String price = priceController.text;
+
+    FirebaseFirestore.instance.collection('breakfast').doc(docId).update({
+      'food': food,
+      'price': price,
+      'imageUrl': imageUrl,
+    }).then((value) {
+      print("Data updated successfully");
+      Fluttertoast.showToast(
+        msg: "Data updated successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
+      Navigator.pop(context);
+    }).catchError((error) {
+      print("Failed to update data: $error");
+    });
+  }
+
+  void deleteDataFromFirestore(String docId) {
+    FirebaseFirestore.instance
+        .collection('breakfast')
+        .doc(docId)
+        .delete()
+        .then((value) {
+      print("Data deleted successfully");
+      Fluttertoast.showToast(
+        msg: "Data deleted successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }).catchError((error) {
+      print("Failed to delete data: $error");
     });
   }
 
@@ -72,67 +112,143 @@ class _BreakfastPageState extends State<BreakfastPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Breakfast Food'),
+        title: Text('Breakfast Food'),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-                "assets/img/splash_bg.png"), // Replace with your own image path
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              _image == null
-                  ? Text('No image selected.')
-                  : Image.file(
-                      _image!,
-                      height: 200,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('breakfast').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          final docs = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: docs.length,
+            itemBuilder: (context, index) {
+              var data = docs[index].data() as Map<String, dynamic>;
+              return ListTile(
+                leading: data['imageUrl'] != null
+                    ? Image.network(data['imageUrl'], width: 100, height: 100)
+                    : Icon(Icons.fastfood),
+                title: Text(data['food']),
+                subtitle: Text('Price: ${data['price']}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        foodController.text = data['food'];
+                        priceController.text = data['price'];
+                        _image = null; // Clear image selection
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Update Breakfast'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _image == null
+                                    ? Text('No image selected.')
+                                    : Image.file(_image!, height: 200),
+                                RoundButton(
+                                  title: "Select New Image",
+                                  onPressed: getImageFromGallery,
+                                ),
+                                TextField(
+                                  controller: foodController,
+                                  decoration: InputDecoration(
+                                      labelText: 'Enter Food Name'),
+                                ),
+                                TextField(
+                                  controller: priceController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Enter Price'),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(
+                                child: Text('Update'),
+                                onPressed: () async {
+                                  String? imageUrl = _image != null
+                                      ? await uploadImageToFirebase()
+                                      : data['imageUrl'];
+                                  updateDataInFirestore(
+                                      docs[index].id, imageUrl);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
-              SizedBox(height: 20),
-              RoundButton(
-                title: "Select Food Image",
-                onPressed: getImageFromGallery,
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: foodController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Food Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: priceController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter price',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () => deleteDataFromFirestore(docs[index].id),
+                    ),
                   ],
                 ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          foodController.clear();
+          priceController.clear();
+          _image = null; // Clear image selection
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Add Breakfast Food'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _image == null
+                      ? Text('No image selected.')
+                      : Image.file(_image!, height: 200),
+                  RoundButton(
+                    title: "Select Food Image",
+                    onPressed: getImageFromGallery,
+                  ),
+                  TextField(
+                    controller: foodController,
+                    decoration: InputDecoration(labelText: 'Enter Food Name'),
+                  ),
+                  TextField(
+                    controller: priceController,
+                    decoration: InputDecoration(labelText: 'Enter Price'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              RoundButton(
-                title: "Upload Image and Save Data",
-                onPressed: () async {
-                  String? imageUrl = await uploadImageToFirebase();
-                  saveDataToFirestore(imageUrl);
-                },
-              ),
-            ],
-          ),
-        ),
+              actions: [
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                TextButton(
+                  child: Text('Save'),
+                  onPressed: () async {
+                    String? imageUrl = await uploadImageToFirebase();
+                    saveDataToFirestore(imageUrl);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

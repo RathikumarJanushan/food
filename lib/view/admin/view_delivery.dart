@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DeliveryScreen extends StatelessWidget {
   final CollectionReference deliveryCollection =
@@ -11,6 +10,7 @@ class DeliveryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Delivered Orders'),
+        automaticallyImplyLeading: false, // Remove the back button
       ),
       body: Container(
         decoration: BoxDecoration(
