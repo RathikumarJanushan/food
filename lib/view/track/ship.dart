@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_order/common_widget/round_button.dart';
+import 'dart:async';
 
 class ShipScreen extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -59,6 +60,8 @@ class ShipScreen extends StatelessWidget {
               int readyInMinutes = order['readyInMinutes'];
               String address = order['address'];
 
+              DateTime readyTime =
+                  timestamp.toDate().add(Duration(minutes: readyInMinutes));
               return Card(
                 margin: EdgeInsets.all(10),
                 child: Padding(
@@ -119,6 +122,8 @@ class ShipScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
+                      CountdownTimer(readyTime: readyTime),
+                      SizedBox(height: 20),
                       RoundButton(
                         title: "Confirm ",
                         onPressed: () => confirmOrder(context, order),
@@ -158,5 +163,65 @@ class ShipScreen extends StatelessWidget {
         SnackBar(content: Text('Failed to confirm the order: $error')),
       );
     }
+  }
+}
+
+class CountdownTimer extends StatefulWidget {
+  final DateTime readyTime;
+
+  CountdownTimer({required this.readyTime});
+
+  @override
+  _CountdownTimerState createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  late Timer _timer;
+  late Duration _remainingTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingTime = widget.readyTime.difference(DateTime.now());
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _remainingTime = widget.readyTime.difference(DateTime.now());
+        if (_remainingTime.isNegative) {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_remainingTime.isNegative) {
+      return Text(
+        'delivery completed',
+        style: TextStyle(
+          color: Colors.green,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+
+    return Text(
+      'Time remaining: ${_remainingTime.inMinutes}:${(_remainingTime.inSeconds % 60).toString().padLeft(2, '0')}',
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    );
   }
 }

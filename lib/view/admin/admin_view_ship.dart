@@ -85,14 +85,14 @@ class adminShipScreen extends StatelessWidget {
                           return ListTile(
                             title: Text(food),
                             subtitle: Text(
-                                'Price: \$${price.toStringAsFixed(2)} x $quantity'),
+                                'Price: \RM${price.toStringAsFixed(2)} x $quantity'),
                             trailing: Text(
-                                'Total: \$${(price * quantity).toStringAsFixed(2)}'),
+                                'Total: \RM${(price * quantity).toStringAsFixed(2)}'),
                           );
                         }).toList(),
                         SizedBox(height: 10),
                         Text(
-                          'Total Price: \$${totalPrice.toStringAsFixed(2)}',
+                          'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
