@@ -15,14 +15,13 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = _auth.currentUser;
-
     var media = MediaQuery.of(context).size;
 
     if (user == null) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Your Cart'),
-          automaticallyImplyLeading: false, // Removes the back button
+          automaticallyImplyLeading: false,
         ),
         body: Container(
           height: media.height,
@@ -43,7 +42,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
-        automaticallyImplyLeading: false, // Removes the back button
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         height: media.height,
@@ -72,7 +71,6 @@ class CartScreen extends StatelessWidget {
 
             List<DocumentSnapshot> cartItems = snapshot.data!.docs;
 
-            // Calculate total price
             double totalPrice = cartItems.fold(0, (total, item) {
               String priceString = item['price'];
               double price = double.tryParse(priceString) ?? 0.0;
@@ -88,64 +86,8 @@ class CartScreen extends StatelessWidget {
                 }
 
                 if (!coinSnapshot.hasData || !coinSnapshot.data!.exists) {
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: cartItems.length,
-                          itemBuilder: (context, index) {
-                            DocumentSnapshot item = cartItems[index];
-                            String food = item['food'];
-                            String priceString = item['price'];
-                            double price = double.tryParse(priceString) ?? 0.0;
-                            int quantity = item['quantity'];
-
-                            return ListTile(
-                              title: Text(food),
-                              subtitle: Text(
-                                  'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text('Quantity: $quantity'),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () async {
-                                      await cartCollection
-                                          .doc(item.id)
-                                          .delete();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 16),
-                      RoundButton(
-                        title: "Pay Now",
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MergedOrderCheckoutScreen(
-                                cartItems: cartItems,
-                                totalPrice: totalPrice,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: 30),
-                    ],
-                  );
+                  return buildCartContent(context, cartItems, totalPrice,
+                      coinValue: 0, dollarValue: 0);
                 }
 
                 var coinData =
@@ -154,88 +96,109 @@ class CartScreen extends StatelessWidget {
                 double dollarValue =
                     (coinValue is int ? coinValue.toDouble() : coinValue) / 100;
 
-                return Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: cartItems.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot item = cartItems[index];
-                          String food = item['food'];
-                          String priceString = item['price'];
-                          double price = double.tryParse(priceString) ?? 0.0;
-                          int quantity = item['quantity'];
-
-                          return ListTile(
-                            title: Text(food),
-                            subtitle: Text(
-                                'Price: \RM${(price * quantity).toStringAsFixed(2)}'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('Quantity: $quantity'),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () async {
-                                    await cartCollection.doc(item.id).delete();
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 16),
-                    RoundButton(
-                      title: "Pay Now",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MergedOrderCheckoutScreen(
-                              cartItems: cartItems,
-                              totalPrice: totalPrice,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Coins: $coinValue   value = \RM${dollarValue.toStringAsFixed(2)}',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 16),
-                    RoundButton(
-                      title: "Pay with coins",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => orderwithcoins(
-                              cartItems: cartItems,
-                              totalPrice: totalPrice,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 60),
-                  ],
-                );
+                return buildCartContent(context, cartItems, totalPrice,
+                    coinValue: coinValue, dollarValue: dollarValue);
               },
             );
           },
         ),
       ),
     );
+  }
+
+  Widget buildCartContent(
+      BuildContext context, List<DocumentSnapshot> cartItems, double totalPrice,
+      {required double coinValue, required double dollarValue}) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: cartItems.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot item = cartItems[index];
+              String food = item['food'];
+              String priceString = item['price'];
+              double price = double.tryParse(priceString) ?? 0.0;
+              int quantity = item['quantity'];
+
+              return ListTile(
+                title: Text(food),
+                subtitle:
+                    Text('Price: \RM${(price * quantity).toStringAsFixed(2)}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () => updateQuantity(item.id, quantity - 1),
+                    ),
+                    Text('Quantity: $quantity'),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () => updateQuantity(item.id, quantity + 1),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        await cartCollection.doc(item.id).delete();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 16),
+        Text(
+          'Total Price: \RM${totalPrice.toStringAsFixed(2)}',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 16),
+        RoundButton(
+          title: "Pay Now",
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MergedOrderCheckoutScreen(
+                  cartItems: cartItems,
+                  totalPrice: totalPrice,
+                ),
+              ),
+            );
+          },
+        ),
+        SizedBox(height: 16),
+        if (coinValue > 0) ...[
+          Text(
+            'Coins: $coinValue   value = \RM${dollarValue.toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16),
+          RoundButton(
+            title: "Pay with coins",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => orderwithcoins(
+                    cartItems: cartItems,
+                    totalPrice: totalPrice,
+                  ),
+                ),
+              );
+            },
+          ),
+          SizedBox(height: 60),
+        ],
+      ],
+    );
+  }
+
+  void updateQuantity(String docId, int newQuantity) {
+    if (newQuantity > 0) {
+      cartCollection.doc(docId).update({'quantity': newQuantity});
+    }
   }
 }

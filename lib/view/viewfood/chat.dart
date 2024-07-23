@@ -49,6 +49,22 @@ class _AddToCartPageState extends State<AddToCartPage> {
     }
   }
 
+  void _incrementQuantity() {
+    int currentQuantity = int.tryParse(_quantityController.text) ?? 0;
+    setState(() {
+      _quantityController.text = (currentQuantity + 1).toString();
+    });
+  }
+
+  void _decrementQuantity() {
+    int currentQuantity = int.tryParse(_quantityController.text) ?? 0;
+    if (currentQuantity > 0) {
+      setState(() {
+        _quantityController.text = (currentQuantity - 1).toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -83,19 +99,33 @@ class _AddToCartPageState extends State<AddToCartPage> {
                   style: TextStyle(fontSize: 20, color: Colors.green[700]),
                 ),
                 SizedBox(height: 16),
-                TextFormField(
-                  controller: _quantityController,
-                  decoration: InputDecoration(labelText: 'Quantity'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a quantity';
-                    } else if (int.tryParse(value) == null ||
-                        int.parse(value) <= 0) {
-                      return 'Please enter a valid quantity';
-                    }
-                    return null;
-                  },
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: _decrementQuantity,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _quantityController,
+                        decoration: InputDecoration(labelText: 'Quantity'),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a quantity';
+                          } else if (int.tryParse(value) == null ||
+                              int.parse(value) <= 0) {
+                            return 'Please enter a valid quantity';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: _incrementQuantity,
+                    ),
+                  ],
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(

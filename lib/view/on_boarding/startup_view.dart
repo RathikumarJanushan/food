@@ -44,7 +44,7 @@ class _StartupViewState extends State<StartupView> {
               ),
               SizedBox(height: 20),
               Text(
-                "Food Order App",
+                "Larutzz",
                 style: TextStyle(
                   fontSize: media.width * 0.1, // Adjust font size as needed
                   color: Color.fromARGB(255, 9, 9, 9),
