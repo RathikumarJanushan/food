@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCeaJ9bsrOjWWBWCqj3Ugavcq1HX1xZH7U',
-    appId: '1:492156605928:android:79d6215c16303ff62f405d',
-    messagingSenderId: '492156605928',
-    projectId: 'food-dd929',
-    storageBucket: 'food-dd929.appspot.com',
+    apiKey: 'AIzaSyAMTyaYNGtj6iABg56vzePQKCecr0wWilA',
+    appId: '1:1032696622688:android:dc92355d73016baa0e1d05',
+    messagingSenderId: '1032696622688',
+    projectId: 'food1-16bb6',
+    storageBucket: 'food1-16bb6.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAu-Nq23V3TqbgHQuaqy7I8RVANl2ayfoY',
-    appId: '1:492156605928:ios:53c3128080df770f2f405d',
-    messagingSenderId: '492156605928',
-    projectId: 'food-dd929',
-    storageBucket: 'food-dd929.appspot.com',
+    apiKey: 'AIzaSyD2RXg_NRITP62nS58SGndCKvFuadT_yl0',
+    appId: '1:1032696622688:ios:71cf2cc071b1f47b0e1d05',
+    messagingSenderId: '1032696622688',
+    projectId: 'food1-16bb6',
+    storageBucket: 'food1-16bb6.appspot.com',
     iosBundleId: 'com.example.foodOrder',
   );
+
 }
